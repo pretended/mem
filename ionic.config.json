@@ -1,0 +1,7 @@
+{
+  "name": "mem",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}
