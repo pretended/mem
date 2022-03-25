@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:64359081462:android:34cccd36b8ed512b0353d7",
         "android_client_info": {
-          "package_name": "com.robertxu.mem"
+          "package_name": "io.ionic.starter"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "64359081462-c5oom5a18d7otbbnn1jrn8ntdja9rs1f.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.robertxu.mem",
+            "package_name": "io.ionic.starter",
             "certificate_hash": "b95f1012de9983cbcec14f88ccc586ebe674d964"
           }
         },

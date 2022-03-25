@@ -19,14 +19,20 @@ import '@ionic/vue/css/text-alignment.css';
 import '@ionic/vue/css/text-transformation.css';
 import '@ionic/vue/css/flex-utils.css';
 import '@ionic/vue/css/display.css';
-
 /* Theme variables */
 import './theme/variables.css';
+// Above the createApp() line
+import { defineCustomElements } from '@ionic/pwa-elements/loader';
+import {auth} from "@/firebase";
+// Call the element loader after the platform has been bootstrapped
+defineCustomElements(window);
 
-const app = createApp(App)
-  .use(IonicVue)
-  .use(router);
-  
-router.isReady().then(() => {
-  app.mount('#app');
-});
+let app ;
+
+auth.onAuthStateChanged(async () => {
+  if (!app) {
+    app = createApp(App)
+        .use(IonicVue)
+        .use(router).mount('#app');
+  }
+})

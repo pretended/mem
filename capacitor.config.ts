@@ -6,15 +6,12 @@ const config= {
   webDir: 'dist',
   bundledWebRuntime: false,
   "plugins": {
-    "SplashScreen": {
-      "launchShowDuration": 0
-    },
     "GoogleAuth": {
       "scopes": [
         "profile",
         "email"
       ],
-      "serverClientId": "REPLACEME.apps.googleusercontent.com",
+      "serverClientId": "64359081462-hfk338vvanvdfgand8i9hgbmoon5c9r1.apps.googleusercontent.com",
       "forceCodeForRefreshToken": true
     }
   },

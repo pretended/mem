@@ -4,15 +4,21 @@
   </ion-app>
 </template>
 
-<script lang="ts">
+<script>
 import { IonApp, IonRouterOutlet } from '@ionic/vue';
-import { defineComponent } from 'vue';
+import {defineComponent, onMounted} from 'vue';
+import {GoogleAuth} from "@codetrix-studio/capacitor-google-auth";
 
 export default defineComponent({
   name: 'App',
   components: {
     IonApp,
     IonRouterOutlet
+  },
+  setup() {
+    onMounted(() => {
+      GoogleAuth.initialize();
+    });
   }
 });
 </script>
