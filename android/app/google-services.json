@@ -7,18 +7,54 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:64359081462:android:34cccd36b8ed512b0353d7",
+        "mobilesdk_app_id": "1:64359081462:android:54643f700cbe84eb0353d7",
         "android_client_info": {
           "package_name": "io.ionic.starter"
         }
       },
       "oauth_client": [
         {
-          "client_id": "64359081462-c5oom5a18d7otbbnn1jrn8ntdja9rs1f.apps.googleusercontent.com",
+          "client_id": "64359081462-hfk338vvanvdfgand8i9hgbmoon5c9r1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxdvlpcI1xhvDokAhhouVOCejObbQIzDM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "64359081462-hfk338vvanvdfgand8i9hgbmoon5c9r1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "64359081462-tfl7qqc26j22u1mb2r7eegnm2gpj1rqm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.robertxu.mem"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:64359081462:android:060806894d0d710d0353d7",
+        "android_client_info": {
+          "package_name": "io.mem.start"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "64359081462-fqhre9if2u21v0ua2ek960ggtd5oe522.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "io.ionic.starter",
-            "certificate_hash": "b95f1012de9983cbcec14f88ccc586ebe674d964"
+            "package_name": "io.mem.start",
+            "certificate_hash": "458190219a8911404af646da67c8db65037f20a5"
           }
         },
         {
@@ -37,6 +73,13 @@
             {
               "client_id": "64359081462-hfk338vvanvdfgand8i9hgbmoon5c9r1.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "64359081462-tfl7qqc26j22u1mb2r7eegnm2gpj1rqm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.robertxu.mem"
+              }
             }
           ]
         }

@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">mem</string>
     <string name="title_activity_main">mem</string>
-    <string name="package_name">io.ionic.starter</string>
-    <string name="custom_url_scheme">io.ionic.starter</string>
+    <string name="package_name">io.mem.start</string>
+    <string name="custom_url_scheme">io.mem.start</string>
     <string name="server_client_id">64359081462-hfk338vvanvdfgand8i9hgbmoon5c9r1.apps.googleusercontent.com</string>
 </resources>

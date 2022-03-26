@@ -42,6 +42,7 @@ import {
 import {Tools} from "@/firebase/Tools";
 import {createNewGroup} from "@/firebase/auth";
 import {getAuth} from "firebase/auth";
+import moment from 'moment'
 export default {
   name: "NewGroupForm",
   components: {ModalTemplate, IonGrid, IonRow, IonCol, IonInput, IonLabel, IonItem, IonDatetime  },
@@ -56,13 +57,18 @@ export default {
     tomorrow.setDate(tomorrow.getDate() + 1)
     maxConstrain.setDate(maxConstrain.getDate() + (7 * 4))
     const parseDateMinMaxStr = (date) => date.toLocaleDateString().replaceAll('/', '-').split('-').reverse().map(date =>  date < 10 ? '0' + date : date).join('-');
-
     const getMinDate = parseDateMinMaxStr(tomorrow)
-
     const getMaxDate = parseDateMinMaxStr(maxConstrain)
+    function toNearest30Minutes(date) {
+      const start = moment(date)
+      return start.minute() % 30 === 0
+          ?
+          moment(date).format() :
+          moment(start, moment.ISO_8601).add(30 -  start.minute() % 30, "minutes").format()
+    }
     const form = reactive({
       name: '',
-      revealDate: getMinDate
+      revealDate: toNearest30Minutes(new Date(tomorrow))
     })
 
     const create = async () => {
@@ -112,7 +118,7 @@ export default {
 
 <style scoped>
 .input {
-  border: 2px whitesmoke solid;
+  border: 0px whitesmoke solid;
   border-radius: 8px;
   --padding-start: 10px;
 }

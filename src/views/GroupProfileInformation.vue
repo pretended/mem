@@ -61,7 +61,7 @@
         </ion-list>
       </ion-row>
       <ion-row class="ion-padding-horizontal" style="margin-top: 40px">
-        <ion-button expand="block" strong style="width: 100%" @click="reveal">Reveal</ion-button>
+        <ion-button expand="block" strong style="width: 100%" @click="reveal" :disabled="!moment(new Date()).isBefore(moment(groupData.revealDate)) ">Reveal</ion-button>
       </ion-row>
     </ion-grid>
     <ion-refresher slot="fixed"  @ionRefresh="refreshContent($event)">
@@ -91,12 +91,13 @@ import {
 import {useRoute, useRouter} from "vue-router";
 import UserListCard from "@/components/UserListCard";
 import AddMembersToGroupForm from "@/components/form/AddMembersToGroupForm";
-import { onBeforeMount, ref} from "vue";
+import {getCurrentInstance, onBeforeMount, ref} from "vue";
 import {getGroupByUID, getMultipleUsersInfo} from "@/firebase/AppRequests";
 import {getAuth} from "firebase/auth";
 import {ellipsisVertical} from 'ionicons/icons';
 import statistics from '../data/Statistics';
 import moment from "moment";
+import RevealComponent from "@/components/RevealComponent";
 export default {
   name: "GroupProfileInformation",
   components: {
@@ -107,7 +108,20 @@ export default {
     const query = useRoute().query;
     const groupId = query.q
     const groupData = ref()
-
+    const reveal = async (groupData) => {
+      const modal = await modalController.create({
+        animated: true,
+        component: RevealComponent,
+        componentProps: {
+          group: groupData,
+          modalId: 'modal-reveal'
+        },
+        swipeToClose: true,
+        id: 'modal-reveal',
+        presentingElement: getCurrentInstance().parent.refs.ionRouterOutlet
+      })
+      await modal.present()
+    }
     const getGroup = async () => {
       groupData.value = await getGroupByUID(groupId);
       const users = await getMultipleUsersInfo(groupData.value.users)
@@ -201,7 +215,9 @@ export default {
       actionSheetHandler,
       currUser: getAuth().currentUser,
       statistics,
-      formattedRevealDate: () => moment(groupData.value.revealDate).format('dddd, DD MMM YYYY HH:MM z')
+      formattedRevealDate: () => moment(groupData.value.revealDate).format('dddd, DD MMM YYYY HH:MM z'),
+      moment: moment,
+      reveal
     }
   }
 }

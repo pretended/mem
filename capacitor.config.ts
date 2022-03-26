@@ -1,7 +1,7 @@
 
 
 const config= {
-  appId: 'io.ionic.starter',
+  appId: 'io.mem.start',
   appName: 'mem',
   webDir: 'dist',
   bundledWebRuntime: false,
