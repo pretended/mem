@@ -4,7 +4,7 @@ import {
     getDoc,
 } from 'firebase/firestore'
 import {db, storage} from "@/firebase/index";
-import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
+import {getDownloadURL, ref , uploadString} from "firebase/storage";
 import moment from "moment";
 export class Tools {
     async isUsernameAvailable(username) {
@@ -15,12 +15,10 @@ export class Tools {
         }
         return false;
     }
-     async uploadImgURL(url, uid) {
+     async uploadImgURL(image, uid) {
         const imgRef = await ref(storage, 'users/' + uid + '/photoURL.jpg')
-        const response = await fetch(url);
-        const blob = await response.blob()
-        await uploadBytes(imgRef, blob, {contentType: 'image/jpeg'});
-        return await getDownloadURL(imgRef);
+         const snapshot = await uploadString(imgRef, image, 'data_url')
+         return await getDownloadURL(snapshot.ref);
     }
     async getCurrentUserFromFirestore(uid) {
         const user = (await getDoc(doc(db, 'users', uid)))
