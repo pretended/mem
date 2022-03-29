@@ -109,8 +109,7 @@ export default {
     const groupId = query.q
     const groupData = ref()
     const ci = getCurrentInstance()
-    const reveal = async (groupData) => {
-      console.log( ci)
+    const reveal = async () => {
       const modal = await modalController.create({
         animated: true,
         component: RevealComponent,
@@ -120,7 +119,7 @@ export default {
         },
         swipeToClose: true,
         id: 'modal-reveal',
-        presentingElement: ci.parent.refs.ionRouterOutlet
+        presentingElement: ci.parent.refs.ionRouterOutlet,
       })
       await modal.present()
     }
