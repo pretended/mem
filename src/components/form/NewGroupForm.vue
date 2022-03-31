@@ -4,8 +4,8 @@
     <ion-row>
       <ion-col >
         <ion-item color="white" class="no-border ion-no-padding ">
-          <ion-label position="floating"  style="margin-left: 10px; font-weight: 500; font-size: 15px">Group Name</ion-label>
-          <ion-input class="input " style="font-weight: 500" v-model="form.name"  >
+          <ion-label position="stacked"  style="margin-left: 2px; font-weight: 500; font-size: 15px">Group Name</ion-label>
+          <ion-input class="input cccc" style="font-weight: 500; " v-model="form.name"  >
           </ion-input>
         </ion-item>
       </ion-col>
@@ -37,7 +37,7 @@ import {
   IonItem,
   IonDatetime,
   toastController,
-  modalController
+  modalController, IonButton
 } from "@ionic/vue";
 import {Tools} from "@/firebase/Tools";
 import {createNewGroup} from "@/firebase/auth";
@@ -45,7 +45,7 @@ import {getAuth} from "firebase/auth";
 import moment from 'moment'
 export default {
   name: "NewGroupForm",
-  components: {ModalTemplate, IonGrid, IonRow, IonCol, IonInput, IonLabel, IonItem, IonDatetime  },
+  components: {ModalTemplate, IonGrid, IonRow, IonCol, IonInput, IonLabel, IonItem, IonDatetime, IonButton  },
   props: {
     modalId: String,
     title: String
@@ -124,5 +124,8 @@ export default {
 }
 .no-border {
   --border-style: 0px;
+}
+.cccc {
+  background-color: var(--ion-color-light);
 }
 </style>

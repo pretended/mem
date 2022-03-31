@@ -26,13 +26,16 @@ import { defineCustomElements } from '@ionic/pwa-elements/loader';
 import {auth} from "@/firebase";
 // Call the element loader after the platform has been bootstrapped
 defineCustomElements(window);
-
+import  "@capacitor-community/camera-preview";
 let app ;
 
 auth.onAuthStateChanged(async () => {
   if (!app) {
     app = createApp(App)
         .use(IonicVue)
-        .use(router).mount('#app');
+        .use(router)
+    router.isReady().then( () => {
+      app.mount('#app')
+    })
   }
 })

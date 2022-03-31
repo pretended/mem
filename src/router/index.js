@@ -45,6 +45,13 @@ const routes = [
         }
       },
       {
+        path: 'profile/edit',
+        component: () => import('@/views/EditProfilePage.vue'),
+        meta: {
+          requiresAuth: true
+        }
+      },
+      {
         path: 'friends',
         component: () => import('@/views/FriendsView.vue'),
         name: 'FriendsPage',
@@ -79,7 +86,6 @@ const router = createRouter({
 })
 router.beforeEach(async (to, from, next)=>{
   const user = getAuth().currentUser
-  console.log(user)
   let requiresAuth = to.matched.some(record => record.meta.requiresAuth);
   if(requiresAuth && !user ){
     next('/')

@@ -16,7 +16,7 @@ export class Tools {
         return false;
     }
      async uploadImgURL(image, uid) {
-        const imgRef = await ref(storage, 'users/' + uid + '/photoURL.jpg')
+        const imgRef = await ref(storage, 'users/' + uid + '/photoURL.png')
          const snapshot = await uploadString(imgRef, image, 'data_url')
          return await getDownloadURL(snapshot.ref);
     }

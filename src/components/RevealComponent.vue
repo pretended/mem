@@ -1,13 +1,13 @@
 <template>
 <ion-page>
-  <ion-header translucent v-if="group_.statistics">
-    <ion-toolbar class="toolbar" style="padding: 0px !important;">
+  <ion-header v-if="group_.statistics">
+    <ion-toolbar class="toolbar toolbar-container" style="padding: 0px !important;">
       <div  style="display: flex; flex-direction: row; justify-content: space-between; padding-bottom: 8px; padding-top: 8px; '">
-        <ion-progress-bar :style="'width: ' + pgWidth + '%'" color="dark" v-for="(progress, index) in group_.statistics.length" :key="index" :value="v[index]"></ion-progress-bar>
+        <ion-progress-bar :style="'width: ' + pgWidth + '%'" v-for="(progress, index) in group_.statistics.length" :key="index" :value="v[index]"></ion-progress-bar>
       </div>
       <div >
         <swiper       class="mySwiper" :cube-effect="{ shadow: false, slideShadows: false }"
-                      :slides-per-view="'auto'"
+                      :slides-per-view="1"
                       :centeredSlides="true"
                       @slideChange="onSlideChange" effect="fade" :modules="modules" :zoom="true"
                       :autoplay="{
@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import {IonicSlides, IonPage, IonProgressBar, } from "@ionic/vue";
+import {IonicSlides, IonPage, IonProgressBar, IonImg, IonToolbar, IonHeader} from "@ionic/vue";
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import { Autoplay, Zoom, EffectFade } from 'swiper';
 
@@ -40,36 +40,33 @@ import 'swiper/css/effect-fade';
 
 export default {
   name: "RevealComponent",
-  components: {IonPage,IonProgressBar,Swiper, SwiperSlide  },
+  components: {IonPage,IonProgressBar,Swiper, SwiperSlide, IonImg, IonToolbar, IonHeader  },
   props: {
     group: Object,
     modalId: String
   },
   setup(props) {
     const intervalRef = ref();
+    const index = ref(0);
     const onSlideChange = (ev) => {
-      console.log(ev)
-      if (ev.swipeDirection === 'next') {
+       if (ev.swipeDirection === 'next') {
         v.value[index.value] = 1
         index.value += 1
       } else if (ev.swipeDirection === 'prev') {
         v.value[index.value] = 0;
         index.value -= 1
       } else {
-
         v.value[index.value] = 1
         index.value += 1
       }
       if (ev.isEnd) {
         setTimeout(() => {
           clearInterval(intervalRef.value)
-
         }, 4000)
       }
     };
     const v = ref(new Array(props.group.value.statistics.length).fill(0))
     const time = 100
-    const index = ref(0);
     intervalRef.value = setInterval(() => {
       v.value[index.value] += 0.025
 
@@ -103,7 +100,7 @@ export default {
   width: 100%;
 }
 .toolbar {
-  background-color: white;
+  background-color: var(--ion-color-base);
   --opacity: 0 !important;
   padding-inline-start: 0px !important;
   padding-inline-end: 0px !important;

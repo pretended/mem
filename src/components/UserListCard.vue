@@ -1,5 +1,5 @@
 <template>
-<ion-item  class="ion-no-padding no-border" style="padding-top: 5px; padding-bottom: 5px;"  >
+<ion-item  class="ion-no-padding ion-no-margin no-border" style="padding-top: 5px; padding-bottom: 5px;"  >
   <ion-grid class="ion-no-padding">
     <ion-row>
       <ion-col size="3" style="padding-left: 20px">

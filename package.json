@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@capacitor-community/camera-preview": "^2.1.0",
+    "@capacitor-community/photoviewer": "^1.1.3",
     "@capacitor/android": "3.4.3",
     "@capacitor/app": "1.1.1",
     "@capacitor/camera": "^1.3.1",
@@ -49,6 +50,7 @@
     "cypress": "^8.7.0",
     "eslint": "^8.4.1",
     "eslint-plugin-vue": "^8.2.0",
+    "jeep-photoviewer": "^1.1.4",
     "jest": "^27.3.1",
     "ts-jest": "^27.0.7",
     "typescript": "^4.6.3"

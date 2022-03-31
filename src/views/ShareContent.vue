@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import {IonContent, IonPage, IonList, IonToolbar, modalController,} from "@ionic/vue";
+import {IonContent, IonPage, IonList, IonToolbar, modalController, IonTitle,} from "@ionic/vue";
 import {onBeforeMount, ref} from "vue";
 import {getGroups, getMultipleUsersInfo} from "@/firebase/AppRequests";
 import {getAuth} from "firebase/auth";
@@ -25,7 +25,7 @@ import {useRouter} from "vue-router";
 
 export default {
   name: "ShareContent",
-  components: {GroupItem, IonPage, IonContent, IonList, IonToolbar, },
+  components: {GroupItem, IonPage, IonContent, IonList, IonToolbar, IonTitle },
   props: {
     imageBase64: {
       type: String,

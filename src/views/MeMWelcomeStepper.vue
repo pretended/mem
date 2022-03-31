@@ -80,8 +80,7 @@ export default defineComponent({
       })
       try {
         await loading.present()
-        const r = await new Auth().googleAuth();
-        console.log(r)
+        await new Auth().googleAuth();
         await router.push('/app/profile')
       } catch (e) {
         const mod = await toastController.create({

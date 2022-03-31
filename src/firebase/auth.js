@@ -1,4 +1,4 @@
-import {GoogleAuthProvider, signInWithCredential , getAuth, signInWithRedirect, signInWithPopup, getRedirectResult} from "firebase/auth";
+import {GoogleAuthProvider, signInWithCredential , getAuth, signInWithRedirect, signInWithPopup, getRedirectResult, getAdditionalUserInfo} from "firebase/auth";
 import {setDoc, doc, } from "firebase/firestore";
 import {auth, db} from './index'
 import {Tools} from "@/firebase/Tools";
@@ -14,7 +14,6 @@ export class Auth {
         const googleProvider = new GoogleAuthProvider();
         await signInWithRedirect(auth, googleProvider);
         return getRedirectResult(auth).then((user) => {
-            console.log(user)
             return user;
         }).catch((error) => {
             const errorCode = error.code;
@@ -33,8 +32,8 @@ export class Auth {
         } else {
             res = await this.nativeMobileDeviceGoogleAuth()
         }
-        await this.registerNewUser(res.user)
-        console.log(res)
+        const moreInfo = getAdditionalUserInfo(res)
+        moreInfo.isNewUser ? await this.registerNewUser(res.user) : ''
         return res.user;
     }
     async phoneNumberAuth(phoneNumber) {

@@ -2,7 +2,7 @@
 <ion-page>
   <ion-header>
     <ion-toolbar>
-      <ion-back-button slot="start" ></ion-back-button>
+      <ion-back-button slot="start" @click="back_" ></ion-back-button>
       <ion-button slot="end" fill="clear" strong @click="actionSheetHandler">
         <ion-icon  :icon="ellipsisVertical"></ion-icon> </ion-button>
     </ion-toolbar>
@@ -13,7 +13,8 @@
         <ion-title>Group </ion-title>
       </ion-toolbar>
     </ion-header>
-    <ion-grid v-if="groupData" class="ion-no-padding">
+    <ion-grid v-if="groupData" class="ion-no-padding" style="height: 90%; justify-content: space-between; display: flex; flex-direction: column">
+    <div>
       <ion-row>
         <ion-col class="ion-text-center" style="font-weight: bold">
           <ion-label style="font-size: 25px">{{groupData.groupName}}</ion-label>
@@ -26,13 +27,12 @@
           </ion-label>
         </ion-col>
       </ion-row>
-      <ion-row style="margin-top: 15px">
+
+      <ion-row>
         <ion-item-divider style="font-weight: 600; font-size: 15px" color="transparent">
           Members
           <ion-button slot="end" @click="addMembers(groupData)" strong fill="clear">Add members</ion-button>
         </ion-item-divider>
-      </ion-row>
-      <ion-row>
         <ion-list style="width: 100%">
           <UserListCard :user="user" v-for="(user, index) in groupData.usersInfo" :key="index">
             <template v-slot:morecols v-if="user.uid === currUser.uid" >
@@ -46,12 +46,11 @@
           </UserListCard>
         </ion-list>
       </ion-row>
-      <ion-row style="margin-top: 15px">
+
+      <ion-row>
         <ion-item-divider style="font-weight: 600; font-size: 15px" color="transparent">
           Metrics
         </ion-item-divider>
-      </ion-row>
-      <ion-row>
         <ion-list v-if="groupData.usersInfo" style="width: 100%">
           <ion-row v-for="(statistic, index) in groupData.statistics" :key="index" class="ion-padding-horizontal" style="display: flex; justify-content: center" >
             <ion-label class="ion-text-center" style="font-size: 12px; font-weight: 500; color: #9a9a9a; margin-top: 1px; margin-bottom: 1px">
@@ -60,9 +59,13 @@
           </ion-row>
         </ion-list>
       </ion-row>
-      <ion-row class="ion-padding-horizontal" style="margin-top: 40px">
-        <ion-button expand="block" strong style="width: 100%" @click="reveal" :disabled="!moment(new Date()).isBefore(moment(groupData.revealDate)) ">Reveal</ion-button>
-      </ion-row>
+    </div>
+      <div>
+        <ion-row class="ion-padding-horizontal" style="margin-top: 40px;  display: flex; align-items: end ">
+          <ion-button expand="block"  strong style="width: 100%" @click="reveal" :disabled="moment(new Date()).isBefore(moment(groupData.revealDate)) ">Reveal</ion-button>
+        </ion-row>
+      </div>
+
     </ion-grid>
     <ion-refresher slot="fixed"  @ionRefresh="refreshContent($event)">
       <ion-refresher-content></ion-refresher-content>
@@ -85,14 +88,22 @@ import {
   IonCol,
   IonButton,
   IonItemDivider,
-  modalController, loadingController, actionSheetController, IonRefresher, IonRefresherContent,
+  modalController,
+  loadingController,
+  actionSheetController,
+  IonRefresher,
+  IonRefresherContent,
+  IonLabel,
+  IonBadge,
+  IonList,
   IonIcon,
+  toastController,
 } from "@ionic/vue";
 import {useRoute, useRouter} from "vue-router";
 import UserListCard from "@/components/UserListCard";
 import AddMembersToGroupForm from "@/components/form/AddMembersToGroupForm";
 import {getCurrentInstance, onBeforeMount, ref} from "vue";
-import {getGroupByUID, getMultipleUsersInfo} from "@/firebase/AppRequests";
+import {getGroupByUID, getMultipleUsersInfo, leaveGroup} from "@/firebase/AppRequests";
 import {getAuth} from "firebase/auth";
 import {ellipsisVertical} from 'ionicons/icons';
 import statistics from '../data/Statistics';
@@ -102,13 +113,20 @@ export default {
   name: "GroupProfileInformation",
   components: {
     UserListCard,
-  IonPage, IonContent, IonHeader, IonToolbar, IonTitle,IonBackButton, IonGrid, IonRow, IonCol, IonButton, IonItemDivider, IonIcon, IonRefresher, IonRefresherContent },
+  IonPage, IonContent, IonHeader, IonToolbar, IonTitle,IonBackButton, IonGrid, IonRow, IonCol, IonButton, IonItemDivider, IonIcon, IonRefresher, IonRefresherContent, IonLabel, IonBadge, IonList, },
   setup() {
     const router = useRouter();
+    const route = useRoute();
     const query = useRoute().query;
     const groupId = query.q
     const groupData = ref()
     const ci = getCurrentInstance()
+    const back_ = async () => {
+      let query = Object.assign({},route.query);
+      delete query.q;
+      await router.replace({query});
+      await router.back()
+    }
     const reveal = async () => {
       const modal = await modalController.create({
         animated: true,
@@ -176,15 +194,25 @@ export default {
       const buttons =  [
 
         {
-          text: 'Share',
+          text: 'Share Group',
           handler: () => {
             console.log('Share clicked')
           },
         },
         {
           text: 'Leave Group',
-          handler: () => {
-            console.log('Share clicked')
+          handler: async () => {
+            const uid = getAuth().currentUser.uid;
+            try {
+              await leaveGroup(groupData.value.uid, uid);
+              await router.push('/app/groups')
+              await (await toastController.create({
+                message: 'You have left group ' + groupData.value.groupName,
+                duration: 3000
+              })).present();
+            } catch (e) {
+              console.error(e)
+            }
           },
         },
         {
@@ -208,6 +236,7 @@ export default {
     }
 
     return {
+      back_,
       refreshContent,
       addMembers,
       goBack,

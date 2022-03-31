@@ -3,6 +3,8 @@
   <ion-header>
     <ion-toolbar>
       <ion-back-button slot="start" ></ion-back-button>
+      <slot name="ending"></slot>
+
     </ion-toolbar>
   </ion-header>
   <ion-content :fullscreen="true">

@@ -1,12 +1,9 @@
 <template>
-  <ModalTemplate title="Add Members" :modal-id="modalId">
+  <ModalTemplate title="Add Members" :modal-id="modalId" class="modal-templ">
     <template v-slot:header>
       <ion-button slot="end" fill="clear" strong :disabled="membersToAdd.length === 0" @click="addMembers">Add</ion-button>
     </template>
     <ion-grid class="ion-no-padding">
-      <ion-row>
-        <ion-searchbar></ion-searchbar>
-      </ion-row>
       <ion-row>
         <ion-item-divider style="font-weight: 600; font-size: 15px" color="transparent">
           Suggestions
@@ -14,7 +11,7 @@
       </ion-row>
       <ion-row>
         <ion-list style="width: 100%" v-if="suggested.length > 0" class="ion-color-medium">
-          <UserListCard @click="membersHandler(user)" :user="user" v-for="(user, index) in suggested" :key="index" :show-followings="false">
+          <UserListCard @click="membersHandler(user)" :user="user" v-for="(user, index) in suggested" :key="index" :show-followings="false" >
             <template v-slot:morecols>
               <ion-col size="3" style="display: flex; align-items: center; justify-content: end">
                   <ion-checkbox  :checked="user.checked"
@@ -43,7 +40,16 @@
 
 <script>
 import ModalTemplate from "@/components/templates/ModalTemplate";
-import {IonGrid, IonRow, IonSearchbar, IonItemDivider, IonButton, modalController, IonCol, IonCheckbox } from "@ionic/vue";
+import {
+  IonGrid,
+  IonRow,
+  IonItemDivider,
+  IonButton,
+  modalController,
+  IonCol,
+  IonCheckbox,
+  IonList
+} from "@ionic/vue";
 import {getAuth} from "firebase/auth";
 import {addMembersToGroup, getMultipleUsersInfo, getUserInfo} from "@/firebase/AppRequests";
 import {onBeforeMount, ref} from "vue";
@@ -51,7 +57,7 @@ import UserListCard from "@/components/UserListCard";
 import {useRouter} from "vue-router";
 export default {
   name: "AddMembersToGroupForm",
-  components: { ModalTemplate, IonGrid,IonRow, IonSearchbar, IonItemDivider, UserListCard, IonButton, IonCol, IonCheckbox },
+  components: { ModalTemplate, IonGrid,IonRow, IonList, IonItemDivider, UserListCard, IonButton, IonCol, IonCheckbox },
   props: {
     modalId: String,
     group: Object
@@ -112,5 +118,7 @@ export default {
 </script>
 
 <style scoped>
-
+.modal-templ {
+  --background: red !important;
+}
 </style>

@@ -1,13 +1,13 @@
 <template>
-  <ion-page>
-    <ion-header >
-      <ion-toolbar>
+  <ion-page class="modal-templ">
+    <ion-header class="modal-templ">
+      <ion-toolbar class="modal-templ">
           <ion-button @click="dismissModal" fill="clear" slot="start"><ion-icon :icon="closeOutline"></ion-icon></ion-button>
         <ion-title >{{title}}</ion-title>
         <slot name="header"></slot>
       </ion-toolbar>
     </ion-header>
-    <ion-content :fullscreen="true">
+    <ion-content :fullscreen="true" class="modal-templ">
       <ion-header collapse="condense">
         <ion-toolbar>
           <ion-title>{{ title }}</ion-title>
@@ -48,5 +48,9 @@ export default {
 </script>
 
 <style scoped>
-
+.modal-templ {
+  background-color: black !important;
+  --background: black !important;
+  --ion-background-color: black !important;
+}
 </style>

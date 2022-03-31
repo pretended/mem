@@ -1,6 +1,7 @@
 import {db, storage,} from "@/firebase/index";
 import {getDownloadURL, ref, uploadString} from "firebase/storage";
-import {updateDoc, arrayUnion, doc} from "firebase/firestore";
+import {updateDoc, arrayUnion, doc, setDoc} from "firebase/firestore";
+import {Tools} from "@/firebase/Tools";
 
 const ACTIONS = {
     IMAGE: 'sent'
@@ -25,5 +26,9 @@ export async function sendImageToStorage(userUId, groupID, image) {
             action: ACTIONS.IMAGE
         })
     })
-
+}
+export async function updateUserProfileImage(uid, image) {
+    const url = new Tools().uploadImgURL(image, uid);
+    await setDoc(doc(db, 'users', uid), {photoURL: await url}, {merge: true})
+    return url;
 }

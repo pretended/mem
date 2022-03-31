@@ -1,6 +1,6 @@
 <template>
   <ion-avatar :style="imgAvatarStyle" >
-    <ion-img  @loadeddata="test" :src="src"></ion-img>
+    <ion-img :src="src"></ion-img>
   </ion-avatar>
 <!--  <ion-skeleton-text animated v-else :style="skeletonTextStyle"></ion-skeleton-text>-->
 </template>
@@ -21,11 +21,6 @@ export default {
       type: [Number, String],
       default: 125
     },
-  },
-  methods: {
-    test() {
-      console.log('aasfddsaf')
-    }
   },
   computed: {
     imgAvatarStyle () {

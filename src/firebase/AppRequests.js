@@ -1,4 +1,4 @@
-import {collection, where, query, getDocs, getDoc, doc, setDoc, arrayUnion, arrayRemove, orderBy, startAt, endAt} from "firebase/firestore";
+import {collection, where, query, getDocs, getDoc, doc, setDoc, arrayUnion, arrayRemove, orderBy, startAt, endAt, deleteDoc} from "firebase/firestore";
 import {db} from "@/firebase/index";
 
 export async function getUserInfo(uid) {
@@ -32,7 +32,6 @@ export async function getGroups(uid) {
 export async function followUser(myUid, userUidToFollow) {
     // follows a user
     const meIDRef = doc(db, 'users', myUid);
-    console.log('haaaaaa')
     await setDoc(meIDRef, {
         friends: arrayUnion( userUidToFollow)
     }, {merge: true});
@@ -75,4 +74,23 @@ export async function querySearchForUsernameOrDisplayName(text) {
 }
 function removeDuplicateObjectsFromArray(arr) {
     return arr.filter((v,i,a)=>a.findIndex(t=>(t.uid===v.uid))===i)
+}
+export async function leaveGroup(groupUid, userUid) {
+    await setDoc(doc(db, 'group', groupUid), {
+        users: arrayRemove(userUid)
+    }, {merge: true})
+    await setDoc(doc(db, 'users', userUid), {
+        groups: arrayRemove(groupUid)
+    }, {merge: true})
+}
+export async function updateUserData(uid, data) {
+    console.log(data)
+    if (data.username !== data.oldUsername) {
+        await deleteDoc(doc(db, 'usernames', data.oldUsername))
+        const obj = {}
+        obj[data.username] = uid;
+        await setDoc(doc(db, 'usernames', data.username), obj )
+    }
+    await setDoc(doc(db, 'users', uid), {displayName: data.displayName, username: data.username}, {merge: true} )
+
 }

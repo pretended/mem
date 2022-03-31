@@ -4,17 +4,18 @@
     <ion-grid class="ion-no-padding">
       <ion-row>
         <ion-col size="3">
-          <UserAvatar :class="index === 1 ? 'absolut_pos' : 'ion-margin-bottom'" style="border: 1px #e2e2e2 solid" v-for="(user, index) in usersSliced" :key="index" :src="user.photoURL" height="40" width="40" ></UserAvatar>
+          <UserAvatar :class="index === 1 ? 'absolut_pos' : 'ion-margin-bottom'" v-for="(user, index) in usersSliced" :key="index" :src="user.photoURL" height="50" width="5
+          0" ></UserAvatar>
         </ion-col>
         <ion-col size="8" style="display: flex; align-items: center;">
           <div>
             <ion-label style="font-weight: 600">{{groupName}}</ion-label>
               <ion-row>
-                <ion-label style="font-weight: 500; font-size: 12px; color: grey" v-for="(user, index) in usersSliced" :key="index">{{user.username}},&nbsp;</ion-label>
-                <ion-label style="font-weight: 500; font-size: 12px; color: grey">{{nUsers - 2 > 0 ? nUsers - 2 : ''}} more...</ion-label>
+                <ion-label style="font-weight: 500; font-size: 12px; color: grey" v-for="(user, index) in usersSliced" :key="index">{{user.username}}<span v-if="usersSliced.length > 1">,&nbsp;</span></ion-label>
+                <ion-label style="font-weight: 500; font-size: 12px; color: grey" v-if="nUsers > 2">{{nUsers - 2 > 0 ? nUsers - 2 : ''}} more...</ion-label>
               </ion-row>
           </div>
-          <Badge v-if="isGroupOwner" style="margin-top:5px; width: 47px" color="#D1D9E1" text="Owner" text-color="black"></Badge>
+
         </ion-col>
         <ion-col size="1" style="margin: auto" >
           <ion-icon style="font-weight: bold" :icon="chevronForwardOutline"></ion-icon>
@@ -30,7 +31,6 @@
 import {IonItem, IonLabel, IonGrid, IonCol, IonRow, IonIcon} from "@ionic/vue";
 import UserAvatar from "@/components/UserAvatar";
 import {chevronForwardOutline} from "ionicons/icons";
-import Badge from "@/components/Badge";
 import {computed,} from "vue";
 import {getAuth} from "firebase/auth";
 
@@ -42,7 +42,7 @@ export default {
     revealDate: [String, Date],
     users: Array,
   },
-  components: {Badge, UserAvatar, IonItem, IonLabel, IonGrid, IonCol, IonRow, IonIcon},
+  components: {UserAvatar, IonItem, IonLabel, IonGrid, IonCol, IonRow, IonIcon},
   setup(props) {
     const c = computed(() => {
       if (!props.users) return [];         // ✅ Return an empty array if undefined

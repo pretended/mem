@@ -1,13 +1,13 @@
 <template>
   <ion-page>
-    <ion-content class="my-custom-camera-preview-content" :fullscreen="true" v-if="image === null && video === null">
+    <ion-content class="my-custom-camera-preview-content" :fullscreen="true" v-if="image === '' && video === ''">
       <div id="cameraPreview" class="cameraPreview">
         <div v-if="cameraActive">
-          <ion-button color="light" size="small" @click="stopCamera" fill="clear" class="image-overlay" id="closeCamera">
+          <ion-button color="light" size="small" @click="stopAndGoBack" fill="clear" class="image-overlay" id="closeCamera">
             <ion-icon :icon="closeOutline"></ion-icon>
           </ion-button>
           <ion-button color="light" size="small" @click="changeFlash" fill="clear" class="image-overlay" id="flashCamera">
-            <ion-icon :icon="!this.flash ? flashIcon : flashOff"></ion-icon>
+            <ion-icon :icon="!flash_ ? flashIcon : flashOff"></ion-icon>
           </ion-button>
           <ion-button  color="light" size="small" @click="flipCamera" fill="clear"  class="image-overlay" id="flipCamera">
             <ion-icon :icon="cameraReverseOutline"></ion-icon>
@@ -16,22 +16,26 @@
             <ion-icon :icon="ellipseOutline"></ion-icon>
           </ion-button>
         </div>
+        <div v-else style="display: flex;align-items: center; margin: auto">
+          <ion-spinner ></ion-spinner>
+        </div>
       </div>
     </ion-content>
-    <ion-content v-else-if="image !== null">
-      <ion-button color="light" size="small" @click="() => this.image = null" fill="clear" class="image-overlay" >
+    <ion-content v-else-if="image !== ''" :fullscreen="true">
+      <ion-button color="light" size="small" @click="goBack" fill="clear" class="image-overlay"  id="btnclearimage">
         <ion-icon :icon="closeOutline"></ion-icon>
       </ion-button>
       <ion-button class="rounded image-overlay" color="primary" @click="openSendModal" size="small"  id="btnopenmodal">
         <ion-icon  style="padding-left: 4px" :icon="send"></ion-icon>
       </ion-button>
-      <ion-img :src="this.image"></ion-img>
+      <ion-img :src="image"></ion-img>
     </ion-content>
+
   </ion-page>
 </template>
 
 <script>
-import {IonPage, IonContent, IonImg, IonButton, IonIcon, modalController} from '@ionic/vue';
+import {IonPage, IonContent, IonImg, IonButton, IonIcon, modalController, IonSpinner} from '@ionic/vue';
 import {
   closeOutline,
   ellipseOutline,
@@ -42,24 +46,23 @@ import {
 } from 'ionicons/icons';
 import {CameraPreview} from "@capacitor-community/camera-preview";
 import ShareContent from "@/views/ShareContent";
+import {onMounted, ref} from "vue";
+import {useRouter} from "vue-router";
 
 export default {
   name: "CameraPage",
-  components: {IonContent, IonPage, IonImg, IonButton, IonIcon},
-  data: () => {
-    return {
-      image: null,
-      video: null,
-      cameraActive: false,
-      flash: false
+  components: {IonContent, IonPage, IonImg, IonButton, IonIcon, IonSpinner},
+  setup () {
+    const image = ref('');
+    const video = ref('');
+    const cameraActive = ref(false);
+    const flash_ = ref(false);
+    const router = useRouter();
+    const stopCamera = async () => {
+      await CameraPreview.stop()
+      cameraActive.value = false;
     }
-  },
-  async mounted() {
-    await this.openCamera()
-  },
-
-  methods: {
-    async openCamera() {
+    const openCamera =  async () => {
       const cameraPreviewPictureOptions = {
         position: 'rear',
         height: window.screen.height,
@@ -68,26 +71,25 @@ export default {
         className: 'cameraPreview'
       };
       await CameraPreview.start(cameraPreviewPictureOptions);
-      this.cameraActive = true;
-    },
-    async stopCamera() {
-      await  this.$router.back()
-    },
-    async flipCamera() {
-      await CameraPreview.flip()
-    },
-    async captureImage() {
+      cameraActive.value = true;
+    }
+    const captureImage = async () => {
       const cameraPreviewPictureOptions= {
         quality: 100
       };
       const result = await CameraPreview.capture(cameraPreviewPictureOptions);
       const base64PictureData = result.value;
-      this.image = 'data:image/jpeg;base64,' +  base64PictureData;
-    },
-    async openSendModal() {
-      await this.showModalController()
-    },
-    async showModalController() {
+      image.value = 'data:image/jpeg;base64,' +  base64PictureData;
+    }
+    const changeFlash = async () => {
+      flash_.value = !flash_.value
+
+      const CameraPreviewFlashMode = {
+        flashMode: flash_.value ? 'off' : 'on'
+      }
+      await CameraPreview.setFlashMode(CameraPreviewFlashMode)
+    }
+    const showModalController = async () => {
       const modal = await modalController.create({
         breakpoints: [0.1, 0.5, 1],
         initialBreakpoint: 0.5,
@@ -96,22 +98,38 @@ export default {
         swipeToClose: true,
         animated: true,
         componentProps: {
-          imageBase64: this.image,
+          imageBase64: image.value,
         }
       })
       await modal.present()
-    },
-    async changeFlash() {
-      this.flash = !this.flash
-
-      const CameraPreviewFlashMode = {
-        flashMode: this.flash ? 'off' : 'on'
-      }
-      await CameraPreview.setFlashMode(CameraPreviewFlashMode)
     }
-  },
-  setup() {
+    const goBack = async () => {
+      image.value = '';
+      video.value = '';
+      cameraActive.value = false;
+      await openCamera()
+    }
+    const stopAndGoBack = async () => {
+      await stopCamera();
+      await router.back();
+    }
+    onMounted(async () => {
+      console.log('mounted')
+      await openCamera();
+    })
     return {
+      stopAndGoBack,
+      openCamera,
+      stopCamera,
+      flipCamera: async () => await CameraPreview.flip(),
+      captureImage,
+      changeFlash,
+      openSendModal: async () => await showModalController(),
+      goBack,
+      image,
+      video,
+      flash_,
+      cameraActive,
       send,
       closeOutline,
       ellipseOutline,
@@ -119,11 +137,11 @@ export default {
       flashOff,
       cameraReverseOutline
     }
-  }
+  },
 }
 </script>
 
-<style scoped>
+<style scoped >
 .my-custom-camera-preview-content {
   --background: transparent;
 }
@@ -132,6 +150,7 @@ export default {
   width: 100%;
   height: 100%;
   position: absolute;
+  z-index: 11;
 }
 .overlay {
   position: absolute;
@@ -142,7 +161,6 @@ export default {
 .image-overlay {
   z-index: 1;
   position: absolute;
-
   width: 50px;
   height: 50px;
 }
@@ -150,24 +168,33 @@ export default {
   position: absolute;
   right: 1%;
   --ionicon-stroke-width:36px;
-
+  z-index: 11;
 }
 #flipCamera {
   position: absolute;
   bottom: 3%;
   right: 3%;
   --ionicon-stroke-width:46px;
+  z-index: 11;
 }
 #btnopenmodal {
   position: absolute;
   bottom: 3%;
   right: 3%;
   --ionicon-stroke-width:46px;
+  z-index: 11;
 }
 #closeCamera {
   position: absolute;
   left: 1%;
   --ionicon-stroke-width:46px;
+  z-index: 11;
+}
+#btnclearimage {
+  position: absolute;
+  --ionicon-stroke-width:46px;
+  z-index: 11;
+  z-index: 11;
 }
 #cameraCapture {
   position: absolute;
@@ -176,6 +203,7 @@ export default {
   --ionicon-stroke-width:46px;
   width: 70px;
   height: 70px;
+  z-index: 11;
 }
 ion-icon {
   font-size: 64px;
