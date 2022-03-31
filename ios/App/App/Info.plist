@@ -31,8 +31,15 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
-	<key>NSCameraUsageDescription</key>
-	<key>NSMicrophoneUsageDescription</key>
+<key>NSCameraUsageDescription</key>
+<string>Camera usage</string>
+<key>NSMicrophoneUsageDescription</key>
+<string>Microphone Usage</string>
+<key>NSPhotoLibraryAddUsageDescription</key>
+<string>Library Usage</string>
+<key>NSPhotoLibraryUsageDescription</key>
+<string>Library usage </string>
+
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
