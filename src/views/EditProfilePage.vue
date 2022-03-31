@@ -104,7 +104,7 @@ export default {
       text: 'Library',
       handler: async () => {
         if(!(await Camera.checkPermissions()).camera === 'granted') {
-          await Camera.requestPermissions({permissions: ['camera']})
+          await Camera.requestPermissions({permissions: ['photos']})
         }
           const options = {
             source : CameraSource.Photos,

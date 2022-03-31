@@ -82,6 +82,7 @@ export default {
               uid: new Date().getTime().toString(),
               users: [getAuth().currentUser.uid]
             }
+            console.log(data)
             await createNewGroup(data);
             const controller = await toastController.create({
               message: 'Group Created!',

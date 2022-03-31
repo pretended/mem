@@ -21,9 +21,9 @@
         </ion-col>
       </ion-row>
       <ion-row>
-        <ion-col class="ion-text-center" style="font-weight: bold">
-          <ion-label style="font-size: 12px">
-            Reveal <br>{{formattedRevealDate()}}
+        <ion-col class="ion-text-center ion-margin-vertical" style="font-weight: bold">
+          <ion-label style="font-size: 14px">
+            Reveal <br>{{formattedRevealDate}}
           </ion-label>
         </ion-col>
       </ion-row>
@@ -121,6 +121,7 @@ export default {
     const groupId = query.q
     const groupData = ref()
     const ci = getCurrentInstance()
+    const formattedRevealDate = ref('');
     const back_ = async () => {
       let query = Object.assign({},route.query);
       delete query.q;
@@ -148,6 +149,7 @@ export default {
       const element = users.splice(myIndex, 1)[0];
       users.splice(0,0, element)
       groupData.value.usersInfo = users
+      formattedRevealDate.value = moment(groupData.value.revealDate).format('dddd, DD MMM YYYY HH:mm')
     }
     onBeforeMount(async () => {
       if (!groupData.value) {
@@ -245,7 +247,7 @@ export default {
       actionSheetHandler,
       currUser: getAuth().currentUser,
       statistics,
-      formattedRevealDate: () => moment(groupData.value.revealDate).format('dddd, DD MMM YYYY HH:MM z'),
+      formattedRevealDate,
       moment: moment,
       reveal
     }

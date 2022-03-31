@@ -16,8 +16,8 @@
             <ion-icon :icon="ellipseOutline"></ion-icon>
           </ion-button>
         </div>
-        <div v-else style="display: flex;align-items: center; margin: auto">
-          <ion-spinner ></ion-spinner>
+        <div v-else >
+          loading
         </div>
       </div>
     </ion-content>
@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import {IonPage, IonContent, IonImg, IonButton, IonIcon, modalController, IonSpinner} from '@ionic/vue';
+import {IonPage, IonContent, IonImg, IonButton, IonIcon, modalController, } from '@ionic/vue';
 import {
   closeOutline,
   ellipseOutline,
@@ -51,7 +51,7 @@ import {useRouter} from "vue-router";
 
 export default {
   name: "CameraPage",
-  components: {IonContent, IonPage, IonImg, IonButton, IonIcon, IonSpinner},
+  components: {IonContent, IonPage, IonImg, IonButton, IonIcon, },
   setup () {
     const image = ref('');
     const video = ref('');

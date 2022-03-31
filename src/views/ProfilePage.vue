@@ -56,6 +56,9 @@
           </ion-button>
       </ion-row>
     </ion-grid>
+    <ion-refresher slot="fixed"  @ionRefresh="refreshContent($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
   </ion-content>
 </ion-page>
 </template>
@@ -75,7 +78,7 @@ import {
   IonLabel,
   IonItem,
   IonList,
-  IonButton, IonToggle, alertController
+  IonButton, IonToggle, alertController, IonRefresher, IonRefresherContent
 } from "@ionic/vue";
 import { getCurrentUser} from "@/firebase/auth";
 import { chevronForwardOutline, chatboxEllipses, peopleCircle, share, star, helpCircle, mail, lockClosed, document} from 'ionicons/icons'
@@ -84,7 +87,7 @@ import {useRouter} from "vue-router";
 import {onMounted, ref} from "vue";
 export default {
   name: "SettingsPage",
-  components: {UserAvatar, IonPage, IonHeader, IonToolbar, IonContent, IonTitle, IonGrid, IonRow, IonCol, IonIcon, IonLabel, IonItem, IonList, IonButton, IonToggle},
+  components: {IonRefresher, IonRefresherContent, UserAvatar, IonPage, IonHeader, IonToolbar, IonContent, IonTitle, IonGrid, IonRow, IonCol, IonIcon, IonLabel, IonItem, IonList, IonButton, IonToggle},
   setup() {
     const router = useRouter();
     const profileAbout = [{
@@ -166,7 +169,13 @@ export default {
     const goToEditProfile = async () => {
       await router.push('/app/profile/edit')
     }
+    const refreshContent = async (event) => {
+      user.value = await getCurrentUser()
+      event.target.complete();
+    }
+
     return {
+      refreshContent,
       goToEditProfile,
       logout,
       changeFriendRequest,

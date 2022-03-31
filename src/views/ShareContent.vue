@@ -5,17 +5,20 @@
         <ion-title class="ion-text-center ion-padding-top"  style="font-weight: bolder; font-size: 16px">Share</ion-title>
       </ion-toolbar>
 
-    <ion-list class="ion-no-padding">
+    <ion-list class="ion-no-padding" v-if="groups.length > 0">
         <GroupItem @click="sendData(group)" v-for="(group, index) in groups" :key="index" :users="group.infoUsers" :group-name="group.groupName" :creator-i-d="group.creatorUId" :reveal-date="group.revealDate">
         </GroupItem>
 
     </ion-list>
+    <div v-else style="margin-left: auto; margin-right: auto; width: 90%">
+      <ion-label style="font-weight: bold; font-size: 19px">Create a group to start sending content :)</ion-label>
+    </div>
   </ion-content>
 </ion-page>
 </template>
 
 <script>
-import {IonContent, IonPage, IonList, IonToolbar, modalController, IonTitle,} from "@ionic/vue";
+import {IonContent, IonPage, IonList, IonToolbar, modalController, IonTitle, IonLabel,} from "@ionic/vue";
 import {onBeforeMount, ref} from "vue";
 import {getGroups, getMultipleUsersInfo} from "@/firebase/AppRequests";
 import {getAuth} from "firebase/auth";
@@ -25,7 +28,7 @@ import {useRouter} from "vue-router";
 
 export default {
   name: "ShareContent",
-  components: {GroupItem, IonPage, IonContent, IonList, IonToolbar, IonTitle },
+  components: {GroupItem, IonPage, IonContent, IonList, IonToolbar, IonTitle, IonLabel },
   props: {
     imageBase64: {
       type: String,
@@ -62,8 +65,8 @@ export default {
 
       }
     }
-    onBeforeMount( () => {
-       getUserGroups()
+    onBeforeMount( async () => {
+       await getUserGroups()
     })
     return {
       groups,

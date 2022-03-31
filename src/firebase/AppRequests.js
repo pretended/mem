@@ -1,5 +1,6 @@
 import {collection, where, query, getDocs, getDoc, doc, setDoc, arrayUnion, arrayRemove, orderBy, startAt, endAt, deleteDoc} from "firebase/firestore";
 import {db} from "@/firebase/index";
+import {Tools} from "@/firebase/Tools";
 
 export async function getUserInfo(uid) {
     return (await getDoc(doc(db, 'users', uid))).data()
@@ -84,13 +85,16 @@ export async function leaveGroup(groupUid, userUid) {
     }, {merge: true})
 }
 export async function updateUserData(uid, data) {
-    console.log(data)
     if (data.username !== data.oldUsername) {
+        if (!(await new Tools().isUsernameAvailable(data.username))) return;
         await deleteDoc(doc(db, 'usernames', data.oldUsername))
         const obj = {}
         obj[data.username] = uid;
         await setDoc(doc(db, 'usernames', data.username), obj )
     }
-    await setDoc(doc(db, 'users', uid), {displayName: data.displayName, username: data.username}, {merge: true} )
-
+    await setDoc(doc(db, 'users', uid), {
+        displayName: data.displayName,
+        displayName_lowerCaseName: data.displayName.toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, ""),
+        username: data.username
+    }, {merge: true} )
 }

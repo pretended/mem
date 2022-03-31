@@ -20,10 +20,10 @@
             </template>
           </UserListCard>
         </ion-list>
-      <div v-else style="font-weight: 600; width: 100%; display: flex; align-items: center; flex-direction: column; margin-top: 20px; margin-bottom: 20px"  >
+      <div v-else style="font-weight: 500; width: 100%; font-size: 17px;color: var(--ion-color-medium); display: flex; align-items: center; flex-direction: column; margin-top: 20px; margin-bottom: 20px"  >
         No suggestions ...
 
-        <ion-button @click="goToFriends" strong class="ion-padding-horizontal ion-margin-vertical" expand="block" style="width: 100%; margin-top: 30px">
+        <ion-button @click="goToFriends" strong class="ion-padding-horizontal ion-margin-vertical" expand="block" style="width: 100%; margin-top: 30px" >
           Add friends
         </ion-button>
         or

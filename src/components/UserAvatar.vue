@@ -1,16 +1,18 @@
 <template>
-  <ion-avatar :style="imgAvatarStyle" >
-    <ion-img :src="src"></ion-img>
+  <ion-skeleton-text v-if="loading" animated :style="skeletonTextStyle"></ion-skeleton-text>
+  <ion-avatar :style="imgAvatarStyle" v-else >
+    <ion-img @ionImgDidLoad="didLoad" :src="src"></ion-img>
   </ion-avatar>
-<!--  <ion-skeleton-text animated v-else :style="skeletonTextStyle"></ion-skeleton-text>-->
+
 </template>
 
 <script>
-import {IonImg, IonAvatar, } from "@ionic/vue";
+import {IonImg, IonAvatar, IonSkeletonText} from "@ionic/vue";
+import {computed, ref} from "vue";
 
 export default {
   name: "UserAvatar",
-  components: {IonImg, IonAvatar, },
+  components: {IonImg, IonAvatar, IonSkeletonText},
   props: {
     src: [String, null, undefined],
     width: {
@@ -22,14 +24,18 @@ export default {
       default: 125
     },
   },
-  computed: {
-    imgAvatarStyle () {
-      return 'width: ' + this.width + 'px; height: ' + this.height + 'px'
-    },
-    skeletonTextStyle() {
-      return 'width: ' + this.width + 'px; height: ' + this.height + 'px; border-radius: 50%'
+  setup(props) {
+    const loading = ref(false);
+    const didLoad = async () => {
+      loading.value = false
     }
-  }
+    return {
+      didLoad,
+      loading,
+      imgAvatarStyle: computed(() => 'width: ' + props.width + 'px; height: ' + props.height + 'px'),
+      skeletonTextStyle: computed(() => 'width: ' + props.width + 'px; height: ' + props.height + 'px; border-radius: 50%')
+    }
+  },
 }
 </script>
 

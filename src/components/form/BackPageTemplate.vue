@@ -2,7 +2,7 @@
 <ion-page>
   <ion-header>
     <ion-toolbar>
-      <ion-back-button slot="start" ></ion-back-button>
+      <ion-back-button slot="start" @click="goBack" ></ion-back-button>
       <slot name="ending"></slot>
 
     </ion-toolbar>
@@ -20,12 +20,20 @@
 
 <script>
 import {IonPage, IonHeader, IonToolbar, IonBackButton, IonContent, IonTitle} from "@ionic/vue";
+import {useRouter} from "vue-router";
 
 export default {
   name: "BackPageTemplate",
   components: {IonPage, IonHeader, IonToolbar, IonBackButton , IonContent, IonTitle},
   props: {
     title: String
+  },
+  setup() {
+    const router = useRouter();
+    const goBack = async () => await router.back();
+    return {
+      goBack
+    }
   }
 }
 </script>
