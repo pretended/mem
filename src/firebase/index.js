@@ -6,13 +6,7 @@ import { getStorage } from "firebase/storage";
 
 // https://firebase.google.com/docs/web/setup#available-libraries
 const firebaseConfig = {
-    apiKey: "AIzaSyCmy-1a9sYnhG_dS_hdB0IfM_I1ViAu4tA",
-    authDomain: "fir-99b86.firebaseapp.com",
-    projectId: "fir-99b86",
-    storageBucket: "fir-99b86.appspot.com",
-    messagingSenderId: "64359081462",
-    appId: "1:64359081462:web:5012a7dffb8c5f570353d7",
-    measurementId: "G-JWQCY30K92"
+    // api config
 };
 import { getFirestore } from 'firebase/firestore';
 
